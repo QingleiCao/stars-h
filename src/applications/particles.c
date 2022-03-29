@@ -838,22 +838,25 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
             z[ind] = 0.0;
         }
 
-        for(k = 1; k <= time_slots; k++)
+        zsort(count, point);
+
+        for(k = 0; k < time_slots; k++)
         {
             for(l = 0; l < count; l++)
             {
                 x[l+k*count] = x[l];
                 y[l+k*count] = y[l];
+                z[l+k*count] = (double) (k + 1);
             }
         }
       
 		/* 2D sort */ 
-        zsort(count*time_slots, point); 
+        //zsort(count*time_slots, point); 
 
 		/* set Z values */	
-		for(i = 0; i < count*time_slots;)
-			for(j = 1; j <= time_slots; j++)
-				z[i++]=(double)j;
+	//	for(i = 0; i < count*time_slots;)
+	//		for(j = 1; j <= time_slots; j++)
+	//			z[i++]=(double)j;
 
 		//for(i=0;i<count*time_slots;i++)
 			//printf("\n approx:%f, %f, %f\n", x[i], y[i], z[i]);

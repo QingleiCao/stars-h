@@ -582,8 +582,10 @@ int starsh_ssdata_generate_va(STARSH_ssdata **data, STARSH_int count,
         }
     }
     if(time_slots > 0)
+    {
         info = starsh_ssdata_generate_space_time(data, count, ndim, beta, nu, noise, place, sigma, beta_time, nu_time, nonsep_param, aux_param, time_slots);
-    else{
+    }
+        else{
         if(sigma2 < 0)      
             info = starsh_ssdata_generate(data, count, ndim, beta, nu, noise, place, sigma);
         else
