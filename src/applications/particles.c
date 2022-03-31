@@ -838,7 +838,7 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
             z[ind] = 0.0;
         }
 
-        zsort(count, point);
+       // zsort(count, point);
 
         for(k = 0; k < time_slots; k++)
         {
@@ -851,7 +851,7 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
         }
       
 		/* 2D sort */ 
-        //zsort(count*time_slots, point); 
+        zsort3(count*time_slots, point); 
 
 		/* set Z values */	
 	//	for(i = 0; i < count*time_slots;)
