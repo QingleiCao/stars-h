@@ -838,7 +838,6 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
             z[ind] = 0.0;
         }
 
-       // zsort(count, point);
 
         for(k = 0; k < time_slots; k++)
         {
