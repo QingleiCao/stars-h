@@ -469,6 +469,79 @@ int starsh_ssdata_generate_space_time(STARSH_ssdata **data, STARSH_int count, in
     return STARSH_SUCCESS;
 }
 
+int starsh_ssdata_generate_space_time_real(STARSH_ssdata **data, STARSH_int count, int ndim,
+     double *point,   double beta, double nu, double noise,
+        enum STARSH_PARTICLES_PLACEMENT place, double sigma, double beta_time,
+        double nu_time, double nonsep_param, double aux_param, double time_slots)
+    //! Generate @ref STARSH_ssdata object by given distribution.
+    /*! @param[out] data: Address of pointer to @ref STARSH_ssdata object.
+     * @param[in] count: Number of particles.
+     * @param[in] ndim: Dimensionality of space.
+     * @param[in] beta: Correlation length.
+     * @param[in] nu: Smoothing parameter for Mat&eacute;rn kernel.
+     * @param[in] noise: Value to add to diagonal elements.
+     * @param[in] place: Placement strategy for spatial points.
+     * @param[in] sigma: Square of variance.
+     * @param[in] beta_time: Correlation length in time.
+     * @param[in] nu_time: Smoothing parameter for space time Mat&eacute;rn kernel in time.
+     * @param[in] nonsep_param: non seperable parameter for space timeMat&eacute;rn kernel.
+     * @param[in] aux_param: aux parameter for space timeMat&eacute;rn kernel.
+     * @return Error code @ref STARSH_ERRNO.
+     * @sa starsh_ssdata_generate_va(), starsh_ssdata_generate_el().
+     * @ingroup app-spatial
+     * */
+{
+    if(data == NULL)
+    {
+        STARSH_ERROR("Invalid value of `data`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(beta <= 0 || beta_time < 0)
+    {
+        STARSH_ERROR("Invalid value of `beta`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(nu < 0 || nu_time < 0)
+    {
+        STARSH_ERROR("Invalid value of `nu`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(noise < 0)
+    {
+        STARSH_ERROR("Invalid value of `noise`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(sigma < 0)
+    {
+        STARSH_ERROR("Invalid value of `sigma`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    int info;
+
+  //  STARSH_particles *particles;
+   // info = starsh_particles_generate(&particles, count, ndim, place, time_slots);
+    if(info != STARSH_SUCCESS)
+    {
+        fprintf(stderr, "INFO=%d\n", info);
+        return info;
+    }
+
+    STARSH_ssdata *tmp;
+    STARSH_MALLOC(tmp, 1);
+    tmp->particles.count = count;
+    tmp->particles.ndim = ndim;
+    tmp->particles.point = point;
+    tmp->beta = beta;
+    tmp->nu = nu;
+    tmp->noise = noise;
+    tmp->sigma = sigma;
+    tmp->nu_time = nu_time;
+    tmp->beta_time = beta_time;
+    tmp->nonsep_param = nonsep_param;
+    tmp->aux_param = aux_param;
+    *data = tmp;
+    return STARSH_SUCCESS;
+}
 
 int starsh_ssdata_generate_va(STARSH_ssdata **data, STARSH_int count,
         va_list args)
