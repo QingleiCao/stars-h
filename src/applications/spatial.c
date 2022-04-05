@@ -402,7 +402,7 @@ int starsh_ssdata_generate_parsimonious(STARSH_ssdata **data, STARSH_int count, 
 int starsh_ssdata_generate_space_time(STARSH_ssdata **data, STARSH_int count, int ndim,
         double beta, double nu, double noise,
         enum STARSH_PARTICLES_PLACEMENT place, double sigma, double beta_time,
-        double nu_time, double nonsep_param, double aux_param, double time_slots)
+        double nu_time, double nonsep_param, double aux_param, int time_slots)
     //! Generate @ref STARSH_ssdata object by given distribution.
     /*! @param[out] data: Address of pointer to @ref STARSH_ssdata object.
      * @param[in] count: Number of particles.

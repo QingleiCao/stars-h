@@ -812,7 +812,7 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
     count = count / time_slots;
     size_t nelem = count*(ndim+1)*time_slots;
     STARSH_MALLOC(point, nelem);
-    
+   
     if(ndim == 1)
     {
         for(i = 0; i < count; i++)
@@ -849,16 +849,8 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
             }
         }
       
-		/* 2D sort */ 
+	/* 3D sort */ 
         zsort3(count*time_slots, point); 
-
-		/* set Z values */	
-	//	for(i = 0; i < count*time_slots;)
-	//		for(j = 1; j <= time_slots; j++)
-	//			z[i++]=(double)j;
-
-		//for(i=0;i<count*time_slots;i++)
-			//printf("\n approx:%f, %f, %f\n", x[i], y[i], z[i]);
     }
     else
     { //space time not yet supported with 3d
