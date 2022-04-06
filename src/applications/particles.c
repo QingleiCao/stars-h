@@ -808,6 +808,7 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
 {
     STARSH_int i, j, k, l;
     double *point;
+    int index = 0;
     //For time space kernel
     count = count / time_slots;
     size_t nelem = count*(ndim+1)*time_slots;
@@ -821,33 +822,32 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
     else if(ndim == 2)
     {
         STARSH_int sqrtn = floor(sqrt(count)+0.1);
-        if(sqrtn*sqrtn != count)
+        /*if(sqrtn*sqrtn != count)
         {
             STARSH_ERROR("parameter `count` must be square of some integer");
             return STARSH_WRONG_PARAMETER;
-        }
+        }*/
 
         double *x = point, *y = x+count*time_slots, *z = y+count*time_slots;
 
-        for(i = 0; i < sqrtn; i++)
-            for(j = 0; j < sqrtn; j++)
+        for(i = 0; i < sqrtn && index<count*time_slots; i++)
+            for(j = 0; j < sqrtn && index<count*time_slots; j++)
 		{
             STARSH_int ind = i*sqrtn + j;
             x[ind] = (i+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
             y[ind] = (j+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
             z[ind] = 0.0;
+	    index++;
         }
 
-      double scal=0.001;
         for(k = 0; k < time_slots; k++)
         {
             for(l = 0; l < count; l++)
             {
                 x[l+k*count] = x[l];
                 y[l+k*count] = y[l];
-                z[l+k*count] = (double) (scal);
+                z[l+k*count] = (double) (k + 1.0)/(double)time_slots;
             }
-	    scal+=0.001;
         }
 	/* 3D sort */ 
 
