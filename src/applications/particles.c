@@ -821,7 +821,7 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
     }
     else if(ndim == 2)
     {
-        STARSH_int sqrtn = floor(sqrt(count)+0.1);
+        STARSH_int sqrtn = floor(sqrt(count)+0.1)+1;
         /*if(sqrtn*sqrtn != count)
         {
             STARSH_ERROR("parameter `count` must be square of some integer");
