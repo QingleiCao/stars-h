@@ -2292,7 +2292,7 @@ void starsh_ssdata_block_space_time_kernel_2d_simd(int nrows, int ncols,
             expr2 = pow(pow(sqrt(pow(z0 - z1, 2)), 2 * nu_time)/ beta_time + 1.0, nonsep_param / 2.0);
             expr3 = dist / expr2;
             expr4 = pow(pow(sqrt(pow(z0 - z1, 2)), 2 * nu_time) / beta_time + 1.0, nonsep_param + aux_param);
-            if(dist == 0)
+	    if(dist == 0)
                 buffer[j*(size_t)ld+i] = sigma  / expr4 ;//+ noise;
             else
             {

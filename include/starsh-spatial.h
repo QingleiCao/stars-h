@@ -211,7 +211,14 @@ int starsh_ssdata_generate_el(STARSH_ssdata **data, STARSH_int count, ...);
 int starsh_ssdata_get_kernel(STARSH_kernel **kernel, STARSH_ssdata *data,
         enum STARSH_SPATIAL_KERNEL type);
 void starsh_ssdata_free(STARSH_ssdata *data);
-
+int starsh_ssdata_generate_space_time(STARSH_ssdata **data, STARSH_int count, int ndim,
+        double beta, double nu, double noise,
+        enum STARSH_PARTICLES_PLACEMENT place, double sigma, double beta_time,
+        double nu_time, double nonsep_param, double aux_param, int time_slots);
+int starsh_ssdata_generate_space_time_real(STARSH_ssdata **data, STARSH_int count, int ndim,
+     double *point,   double beta, double nu, double noise,
+        enum STARSH_PARTICLES_PLACEMENT place, double sigma, double beta_time,
+        double nu_time, double nonsep_param, double aux_param, double time_slots);
 // KERNELS
 
 void starsh_ssdata_block_exp_kernel_1d(int nrows, int ncols, STARSH_int *irow,

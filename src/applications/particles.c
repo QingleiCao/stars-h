@@ -838,19 +838,21 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
             z[ind] = 0.0;
         }
 
-
+      double scal=0.001;
         for(k = 0; k < time_slots; k++)
         {
             for(l = 0; l < count; l++)
             {
                 x[l+k*count] = x[l];
                 y[l+k*count] = y[l];
-                z[l+k*count] = (double) (k + 1);
+                z[l+k*count] = (double) (scal);
             }
+	    scal+=0.001;
         }
-      
 	/* 3D sort */ 
+
         zsort3(count*time_slots, point); 
+
     }
     else
     { //space time not yet supported with 3d
