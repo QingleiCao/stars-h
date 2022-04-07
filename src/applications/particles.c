@@ -840,19 +840,54 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
 	    index++;
         }
 
-        for(k = 0; k < time_slots; k++)
+
+	/* 3D sort */ 
+        int n = count * time_slots; 
+                //copy x and Y
+        double *pointcopy = (double *) malloc (2 * count * time_slots * sizeof(double));
+ 	memcpy( pointcopy, point, 2 * count * time_slots * sizeof(double) );
+        zsort( count * time_slots, pointcopy);
+        double diff1 = 0.0, diff2=0.0, avglocdiff = 0.0, sumdiffall = 0.0, avgdivall = 0.0;
+       
+	for(int i = 0; i<(count * time_slots) - 1;i++) 
+	{
+		diff1 = fabs(pointcopy[i] - pointcopy[i+1]);
+                diff2 = fabs(pointcopy[i+n] - pointcopy[i+n+1]);
+		avglocdiff = (diff1 + diff2) / 2;
+                sumdiffall+=avglocdiff;
+                //fprintf(stderr,"\n pointcopy[i]:%f, pointcopy[i+1]:%f, pointcopy[i+n]:%f, pointcopy[i+n+1]:%f, diff1:%f , diff2:%f, avglocdiff:%f, sumdiffall:%f\n", pointcopy[i], pointcopy[i+1], pointcopy[i+n], pointcopy[i+n+1], diff1, diff2, avglocdiff, sumdiffall);
+	}
+
+	avgdivall = sumdiffall / (count * time_slots);
+       
+              for(k = 0; k < time_slots; k++)
         {
             for(l = 0; l < count; l++)
             {
                 x[l+k*count] = x[l];
                 y[l+k*count] = y[l];
-                z[l+k*count] = (double) (k + 1.0)/(double)time_slots;
+                z[l+k*count] = (double) (k + 1) * avgdivall;
             }
         }
-	/* 3D sort */ 
+/*	 double sum1=0.0, sum2=0.0, sum3=0.0;
+	 for (int i=0; i<count * time_slots;i++){
+               sum1+=x[i];
+	       sum2+=y[i];
+	       sum3+=z[i];
+	 }
+         fprintf(stderr, "\n Before %f, %f, %f\n", sum1, sum2, sum3);
+*/
+	zsort3(count*time_slots, point); 
 
-        zsort3(count*time_slots, point); 
-
+/*	sum1=0.0, sum2=0.0, sum3=0.0;
+         for (int i=0; i<count * time_slots;i++){
+               sum1+=x[i];
+               sum2+=y[i];
+               sum3+=z[i];
+         }
+         fprintf(stderr, "\n After %f, %f, %f\n", sum1, sum2, sum3);
+*/
+ 	 free(pointcopy);
     }
     else
     { //space time not yet supported with 3d
