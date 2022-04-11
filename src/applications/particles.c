@@ -807,7 +807,7 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
  * */
 {
     STARSH_int i, j, k, l;
-    double *point;
+    double *point, *pointcopy;
     int index = 0;
     //For time space kernel
     count = count / time_slots;
@@ -844,8 +844,9 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
 	/* 3D sort */ 
         int n = count * time_slots; 
                 //copy x and Y
-        double *pointcopy = (double *) malloc (2 * count * time_slots * sizeof(double));
- 	memcpy( pointcopy, point, 2 * count * time_slots * sizeof(double) );
+//        double *pointcopy = (double *) malloc (2 * count * time_slots * sizeof(double));
+        STARSH_MALLOC(pointcopy, 2 * count * time_slots);
+	memcpy( pointcopy, point, 2 * count * time_slots * sizeof(double) );
         zsort( count * time_slots, pointcopy);
         double diff1 = 0.0, diff2=0.0, avglocdiff = 0.0, sumdiffall = 0.0, avgdivall = 0.0;
        
