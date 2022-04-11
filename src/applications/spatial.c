@@ -690,11 +690,6 @@ int starsh_ssdata_generate_space_time_real(STARSH_ssdata **data, STARSH_int coun
         STARSH_ERROR("Invalid value of `nu`");
         return STARSH_WRONG_PARAMETER;
     }
-    if(noise < 0)
-    {
-        STARSH_ERROR("Invalid value of `noise`");
-        return STARSH_WRONG_PARAMETER;
-    }
     if(sigma < 0)
     {
         STARSH_ERROR("Invalid value of `sigma`");
