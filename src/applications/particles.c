@@ -861,7 +861,7 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
 
 	avgdivall = sumdiffall / (count * time_slots);
        
-              for(k = 0; k < time_slots; k++)
+        for(k = 0; k < time_slots; k++)
         {
             for(l = 0; l < count; l++)
             {
@@ -870,25 +870,19 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
                 z[l+k*count] = (double) (k + 1) * avgdivall;
             }
         }
-/*	 double sum1=0.0, sum2=0.0, sum3=0.0;
-	 for (int i=0; i<count * time_slots;i++){
-               sum1+=x[i];
-	       sum2+=y[i];
-	       sum3+=z[i];
-	 }
-         fprintf(stderr, "\n Before %f, %f, %f\n", sum1, sum2, sum3);
-*/
 	zsort3(count*time_slots, point); 
 
-/*	sum1=0.0, sum2=0.0, sum3=0.0;
-         for (int i=0; i<count * time_slots;i++){
-               sum1+=x[i];
-               sum2+=y[i];
-               sum3+=z[i];
-         }
-         fprintf(stderr, "\n After %f, %f, %f\n", sum1, sum2, sum3);
-*/
- 	 free(pointcopy);
+	 for(k = 0; k < time_slots; k++)
+        {
+            for(l = 0; l < count; l++)
+            {
+                x[l+k*count]*= 1000;
+                y[l+k*count]*= 1000;
+            }
+        }
+       free(pointcopy);
+
+
     }
     else
     { //space time not yet supported with 3d
