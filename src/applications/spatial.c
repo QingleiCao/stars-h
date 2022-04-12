@@ -75,7 +75,7 @@ static int radix_sort(uint32_t *data, int count, int ndim,
 
 
 
-int locations_obs_zsort_inplace(int n, double *point)
+int locations_zsort_inplace(int n, double *point)
     //! Sort particles in Z-order (Morton order).
     /*! This function must be used after initializing @ref STARSH_particles with
      * your own data by starsh_particles_init() or starsh_particles_new().
