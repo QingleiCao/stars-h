@@ -17,6 +17,226 @@
 
 #define PI 3.14159265358979323846264338327950288 
 
+
+static void radix_sort_recursive(uint32_t *data, int count, int ndim,
+        int *order, int *tmp_order, int sdim, int sbit,
+        int lo, int hi)
+    // Hierarchical radix sort to get Z-order of particles.
+    // This function is static not to be visible outside this module.
+{
+    int i, lo_last = lo, hi_last = hi;
+    uint32_t *sdata = data+sdim*count;
+    uint32_t check = 1 << sbit;
+    for(i = lo; i <= hi; i++)
+    {
+        if((sdata[order[i]] & check) == 0)
+        {
+            tmp_order[lo_last] = order[i];
+            lo_last++;
+        }
+        else
+        {
+            tmp_order[hi_last] = order[i];
+            hi_last--;
+        }
+    }
+    for(i = lo; i <= hi; i++)
+        order[i] = tmp_order[i];
+    if(sdim > 0)
+    {
+        if(lo_last-lo > 1)
+            radix_sort_recursive(data, count, ndim, order, tmp_order, sdim-1,
+                    sbit, lo, lo_last-1);
+        if(hi-hi_last > 1)
+            radix_sort_recursive(data, count, ndim, order, tmp_order, sdim-1,
+                    sbit, hi_last+1, hi);
+    }
+    else if(sbit > 0)
+    {
+        if(lo_last-lo > 1)
+            radix_sort_recursive(data, count, ndim, order, tmp_order, ndim-1,
+                    sbit-1, lo, lo_last-1);
+        if(hi-hi_last > 1)
+            radix_sort_recursive(data, count, ndim, order, tmp_order, ndim-1,
+                    sbit-1, hi_last+1, hi);
+    }
+}
+
+static int radix_sort(uint32_t *data, int count, int ndim,
+        int *order)
+    // Auxiliary sorting function for starsh_particles_zsort_inpace().
+    // This function is static not to be visible outside this module.
+{
+    int *tmp_order = (int *) malloc(count * sizeof(int));
+    radix_sort_recursive(data, count, ndim, order, tmp_order, ndim-1, 31, 0, count-1);
+    free(tmp_order);
+    return 0;
+}
+
+
+
+int locations_obs_zsort_inplace(int n, double *point)
+    //! Sort particles in Z-order (Morton order).
+    /*! This function must be used after initializing @ref STARSH_particles with
+     * your own data by starsh_particles_init() or starsh_particles_new().
+     *
+     * @sa starsh_particles_init(), starsh_particles_new().
+     * @ingroup app-particles
+     * */
+{
+    int i;
+    int j;
+    int count = n;
+    int ndim = 2;
+    int info;
+    double *ptr1;
+    double *minmax; // min is stored in lower part, max is stored in upper part
+
+    // TODO: count should be replaced by ndim
+    minmax = (double *) malloc(2 * count * sizeof(double));
+
+    for(i = 0; i < ndim; i++)
+    {
+        ptr1 = point+i*count; // i-th dimension
+        minmax[i] = ptr1[0];
+        minmax[i+ndim] = minmax[i];
+        for(j = 1; j < count; j++)
+        {
+            if(minmax[i] > ptr1[j])
+                minmax[i] = ptr1[j];
+            else if (minmax[i+ndim] < ptr1[j])
+                minmax[i+ndim] = ptr1[j];
+        }
+    }
+    // Now minmax[0:ndim] and minmax[ndim:2*ndim] store minimal and maximal
+    // values of coordinates
+    uint32_t *uint_point = (uint32_t *) malloc(ndim * count * sizeof(uint32_t));
+    uint32_t *uint_ptr1;
+    double min, range;
+    for(i = 0; i < ndim; i++)
+    {
+        uint_ptr1 = uint_point+i*count;
+        ptr1 = point+i*count;
+        min = minmax[i];
+        range = minmax[i+ndim]-min;
+        for(j = 0; j < count; j++)
+            uint_ptr1[j] = (ptr1[j]-min)/range*UINT32_MAX;
+    }
+    free(minmax);
+    // Now uint_ptr1 contains initial coordinates, rescaled to range
+    // [0, UINT32_MAX] and converted to uint32_t type to use special radix sort
+    // Prepare indexes to store sort order
+    int *order = (int *) malloc(count * sizeof(int));
+    for(j = 0; j < count; j++)
+        order[j] = j;
+    info = radix_sort(uint_point, count, ndim, order);
+    if(info != 0)
+    {
+        free(uint_point);
+        free(order);
+        return info;
+    }
+    double *new_point = (double *) malloc(ndim * count * sizeof(double));
+    for(j = 0; j < count; j++)
+    {
+        for(i = 0; i < ndim; i++)
+            new_point[count*i+j] = point[count*i+order[j]];
+    }
+    memcpy(point, new_point, ndim * count * sizeof(double));
+   /* for(i = 0; i< count; i++)
+    {
+        locations->x[i] = new_point[i];
+        locations->y[i] = new_point[i+count];
+    }*/
+    free(new_point);
+    free(point);
+    free(uint_point);
+    free(order);
+    return 0;
+}
+
+int locations_zsort_inplace_space_time(int n, double *point)
+    //! Sort particles in Z-order (Morton order).
+    /*! This function must be used after initializing @ref STARSH_particles with
+     * your own data by starsh_particles_init() or starsh_particles_new().
+     *
+     * @sa starsh_particles_init(), starsh_particles_new().
+     * @ingroup app-particles
+     * */
+{
+    int i;
+    int j;
+    int count = n;
+    int ndim = 3;
+    int info;
+    double *ptr1;
+    double *minmax; // min is stored in lower part, max is stored in upper part
+
+    // TODO: count should be replaced by ndim
+    minmax = (double *) malloc(ndim * count * sizeof(double));
+
+    for(i = 0; i < ndim; i++)
+    {
+        ptr1 = point+i*count; // i-th dimension
+        minmax[i] = ptr1[0];
+        minmax[i+ndim] = minmax[i];
+        for(j = 1; j < count; j++)
+        {
+            if(minmax[i] > ptr1[j])
+                minmax[i] = ptr1[j];
+            else if (minmax[i+ndim] < ptr1[j])
+                minmax[i+ndim] = ptr1[j];
+        }
+    }
+    // Now minmax[0:ndim] and minmax[ndim:2*ndim] store minimal and maximal
+    // values of coordinates
+    uint32_t *uint_point = (uint32_t *) malloc(ndim * count * sizeof(uint32_t));
+    uint32_t *uint_ptr1;
+    double min, range;
+    for(i = 0; i < ndim; i++)
+    {
+        uint_ptr1 = uint_point+i*count;
+        ptr1 = point+i*count;
+        min = minmax[i];
+        range = minmax[i+ndim]-min;
+        for(j = 0; j < count; j++)
+            uint_ptr1[j] = (ptr1[j]-min)/range*UINT32_MAX;
+    }
+    free(minmax);
+    // Now uint_ptr1 contains initial coordinates, rescaled to range
+    // [0, UINT32_MAX] and converted to uint32_t type to use special radix sort
+    // Prepare indexes to store sort order
+    int *order = (int *) malloc(count * sizeof(int));
+    for(j = 0; j < count; j++)
+        order[j] = j;
+    info = radix_sort(uint_point, count, ndim, order);
+    if(info != 0)
+    {
+        free(uint_point);
+        free(order);
+        return info;
+    }
+    double *new_point = (double *) malloc(ndim * count * sizeof(double));
+    for(j = 0; j < count; j++)
+    {
+        for(i = 0; i < ndim; i++)
+            new_point[count*i+j] = point[count*i+order[j]];
+    }
+    memcpy(point, new_point, ndim * count * sizeof(double));
+    /*for(i = 0; i< count; i++)
+    {
+        locations->x[i] = new_point[i];
+        locations->y[i] = new_point[i+count];
+        locations->z[i] = new_point[i+2*count];
+    }*/
+    point = new_point;
+    free(new_point);
+    free(uint_point);
+    free(order);
+    return 0;
+}
+
+
 static uint32_t Part1By1(uint32_t x)
     // Spread lower bits of input
 {
@@ -701,7 +921,7 @@ int starsh_ssdata_generate_space_time_real(STARSH_ssdata **data, STARSH_int coun
         return STARSH_WRONG_PARAMETER;
     }
 
-    zsort3( count, point);
+    locations_zsort_inplace_space_time( count, point);
 
     STARSH_ssdata *tmp;
     STARSH_MALLOC(tmp, 1);
@@ -719,6 +939,7 @@ int starsh_ssdata_generate_space_time_real(STARSH_ssdata **data, STARSH_int coun
     *data = tmp;
     return STARSH_SUCCESS;
 }
+
 
 int starsh_ssdata_generate_space_time_real_exageo(STARSH_ssdata **data, STARSH_int count, int ndim,
      double *point,   double beta, double nu, double noise,
