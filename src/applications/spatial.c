@@ -701,7 +701,7 @@ int starsh_ssdata_generate_space_time_real(STARSH_ssdata **data, STARSH_int coun
         return STARSH_WRONG_PARAMETER;
     }
 
-    //zsort3( count, point);
+    zsort3( count, point);
 
     STARSH_ssdata *tmp;
     STARSH_MALLOC(tmp, 1);
