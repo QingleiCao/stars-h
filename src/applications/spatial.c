@@ -149,7 +149,6 @@ int locations_zsort_inplace(int n, double *point)
         locations->y[i] = new_point[i+count];
     }*/
     free(new_point);
-    free(point);
     free(uint_point);
     free(order);
     return 0;
@@ -229,7 +228,6 @@ int locations_zsort_inplace_space_time(int n, double *point)
         locations->y[i] = new_point[i+count];
         locations->z[i] = new_point[i+2*count];
     }*/
-    point = new_point;
     free(new_point);
     free(uint_point);
     free(order);
