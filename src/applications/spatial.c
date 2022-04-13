@@ -733,6 +733,121 @@ int starsh_ssdata_generate(STARSH_ssdata **data, STARSH_int count, int ndim,
     return STARSH_SUCCESS;
 }
 
+int starsh_ssdata_generate_real(STARSH_ssdata **data, STARSH_int count, int ndim, double *point,
+        double beta, double nu, double noise,
+        enum STARSH_PARTICLES_PLACEMENT place, double sigma)
+    //! Generate @ref STARSH_ssdata object by given distribution.
+    /*! @param[out] data: Address of pointer to @ref STARSH_ssdata object.
+     * @param[in] count: Number of particles.
+     * @param[in] ndim: Dimensionality of space.
+     * @param[in] beta: Correlation length.
+     * @param[in] nu: Smoothing parameter for Mat&eacute;rn kernel.
+     * @param[in] noise: Value to add to diagonal elements.
+     * @param[in] place: Placement strategy for spatial points.
+     * @param[in] sigma: Square of variance.
+     * @return Error code @ref STARSH_ERRNO.
+     * @sa starsh_ssdata_generate_va(), starsh_ssdata_generate_el().
+     * @ingroup app-spatial
+     * */
+{
+    if(data == NULL)
+    {
+        STARSH_ERROR("Invalid value of `data`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(beta <= 0)
+    {
+        STARSH_ERROR("Invalid value of `beta`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(nu < 0)
+    {
+        STARSH_ERROR("Invalid value of `nu`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(noise < 0)
+    {
+        STARSH_ERROR("Invalid value of `noise`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(sigma < 0)
+    {
+        STARSH_ERROR("Invalid value of `sigma`");
+        return STARSH_WRONG_PARAMETER;
+    }
+
+    locations_zsort_inplace( count, point);
+
+    STARSH_ssdata *tmp;
+    STARSH_MALLOC(tmp, 1);
+    tmp->particles.count = count;
+    tmp->particles.ndim = ndim;
+    tmp->particles.point = point;
+    tmp->beta = beta;
+    tmp->nu = nu;
+    tmp->noise = noise;
+    tmp->sigma = sigma;
+    *data = tmp;
+    return STARSH_SUCCESS;
+
+}
+
+int starsh_ssdata_generate_real_exageo(STARSH_ssdata **data, STARSH_int count, int ndim, double *point,
+        double beta, double nu, double noise,
+        enum STARSH_PARTICLES_PLACEMENT place, double sigma)
+    //! Generate @ref STARSH_ssdata object by given distribution.
+    /*! @param[out] data: Address of pointer to @ref STARSH_ssdata object.
+     * @param[in] count: Number of particles.
+     * @param[in] ndim: Dimensionality of space.
+     * @param[in] beta: Correlation length.
+     * @param[in] nu: Smoothing parameter for Mat&eacute;rn kernel.
+     * @param[in] noise: Value to add to diagonal elements.
+     * @param[in] place: Placement strategy for spatial points.
+     * @param[in] sigma: Square of variance.
+     * @return Error code @ref STARSH_ERRNO.
+     * @sa starsh_ssdata_generate_va(), starsh_ssdata_generate_el().
+     * @ingroup app-spatial
+     * */
+{
+    if(data == NULL)
+    {
+        STARSH_ERROR("Invalid value of `data`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(beta <= 0)
+    {
+        STARSH_ERROR("Invalid value of `beta`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(nu < 0)
+    {
+        STARSH_ERROR("Invalid value of `nu`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(noise < 0)
+    {
+        STARSH_ERROR("Invalid value of `noise`");
+        return STARSH_WRONG_PARAMETER;
+    }
+    if(sigma < 0)
+    {
+        STARSH_ERROR("Invalid value of `sigma`");
+        return STARSH_WRONG_PARAMETER;
+    }
+
+    STARSH_ssdata *tmp;
+    STARSH_MALLOC(tmp, 1);
+    tmp->particles.count = count;
+    tmp->particles.ndim = ndim;
+    tmp->particles.point = point;
+    tmp->beta = beta;
+    tmp->nu = nu;
+    tmp->noise = noise;
+    tmp->sigma = sigma;
+    *data = tmp;
+    return STARSH_SUCCESS;
+
+}
 
 int starsh_ssdata_generate_parsimonious(STARSH_ssdata **data, STARSH_int count, int ndim,
         double beta, double nu, double noise,

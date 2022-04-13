@@ -223,6 +223,13 @@ int starsh_ssdata_generate_space_time_real_exageo(STARSH_ssdata **data, STARSH_i
      double *point,   double beta, double nu, double noise,
         enum STARSH_PARTICLES_PLACEMENT place, double sigma, double beta_time,
         double nu_time, double nonsep_param, double aux_param, double time_slots);
+int starsh_ssdata_generate_real(STARSH_ssdata **data, STARSH_int count, int ndim, double *point,
+        double beta, double nu, double noise,
+        enum STARSH_PARTICLES_PLACEMENT place, double sigma);
+
+int starsh_ssdata_generate_real_exageo(STARSH_ssdata **data, STARSH_int count, int ndim, double *point,
+        double beta, double nu, double noise,
+        enum STARSH_PARTICLES_PLACEMENT place, double sigma);
 // KERNELS
 
 void starsh_ssdata_block_exp_kernel_1d(int nrows, int ncols, STARSH_int *irow,
