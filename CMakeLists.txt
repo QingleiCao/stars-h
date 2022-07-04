@@ -377,7 +377,10 @@ generate_pkgconfig_file()
 set(DOXYGEN_INPUT)
 add_subdirectory("src")
 add_subdirectory("include")
-include_directories("include")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 
 ###############################################################################
 ##                  BUILD EXAMPLES, TESTS AND DOCS                           ##
