@@ -375,13 +375,9 @@ generate_pkgconfig_file()
 
 # Collect STARS-H sources + headers
 set(DOXYGEN_INPUT)
-add_subdirectory("src")
-add_subdirectory("include")
+add_subdirectory(src)
+add_subdirectory(include)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 
 ###############################################################################
 ##                  BUILD EXAMPLES, TESTS AND DOCS                           ##
