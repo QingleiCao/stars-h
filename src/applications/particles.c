@@ -514,19 +514,22 @@ int starsh_particles_generate_obsolete1(STARSH_particles **data,
     }
     else if(ndim == 2)
     {
-        STARSH_int sqrtn = floor(sqrt(count)+0.1);
-        if(sqrtn*sqrtn != count)
+        STARSH_int sqrtn = floor(sqrt(count)+0.1)+1.0;
+       /* if(sqrtn*sqrtn != count)
         {
             STARSH_ERROR("parameter `count` must be square of some integer");
             return STARSH_WRONG_PARAMETER;
         }
+*/
+	int index = 0;
         double *x = point, *y = x+count;
-        for(i = 0; i < sqrtn; i++)
-            for(j = 0; j < sqrtn; j++)
+        for(i = 0; i < sqrtn && index<count; i++)
+            for(j = 0; j < sqrtn && index<count; j++)
             {
                 STARSH_int ind = i*sqrtn + j;
                 x[ind] = (i+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
                 y[ind] = (j+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
+		index++;
             }
         zsort(count, point);
     }
@@ -583,12 +586,13 @@ int starsh_particles_generate_obsolete2(STARSH_particles **data,
     }
     else if(ndim == 2)
     {
-        STARSH_int sqrtn = floor(sqrt(count)+0.1);
-        if(sqrtn*sqrtn != count)
+        STARSH_int sqrtn = floor(sqrt(count)+0.1)+1.0;
+        /*if(sqrtn*sqrtn != count)
         {
             STARSH_ERROR("parameter `count` must be square of some integer");
             return STARSH_WRONG_PARAMETER;
         }
+*/
         double *x = point, *y = x+count;
         for(i = 0; i < sqrtn; i++)
             x[i] = (i+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
@@ -665,20 +669,22 @@ int starsh_particles_generate_obsolete3(STARSH_particles **data,
 	{
 
 
-		STARSH_int sqrtn = floor(sqrt(count/2)+0.1);
-		if(sqrtn*sqrtn != count/2)
+		STARSH_int sqrtn = floor(sqrt(count/2)+0.1)+1.0;
+		/*if(sqrtn*sqrtn != count/2)
 		{
 			STARSH_ERROR("half of number of particles must be square of some integer");
 			return STARSH_WRONG_PARAMETER;
 		}
-
+		*/
+		int index = 0;
 		double *x = point, *y = x+count;
-		for(i = 0; i < 2*sqrtn; i+=2)
-			for(j = 0; j < 2*sqrtn; j+=2)
+		for(i = 0; i < 2*sqrtn && index<count; i+=2)
+			for(j = 0; j < 2*sqrtn && index<count; j+=2)
 			{
 				STARSH_int ind = i*sqrtn + j;
 				x[ind] = x[ind+1]= (i/2+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
 				y[ind] = y[ind+1]= (j/2+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
+				index++;		
 			}
 
 		zsort(count, point);
@@ -741,21 +747,23 @@ int starsh_particles_generate_obsolete4(STARSH_particles **data,
         {
 
 
-                STARSH_int sqrtn = floor(sqrt(count/2)+0.1);
-                if(sqrtn*sqrtn != count/2)
+                STARSH_int sqrtn = floor(sqrt(count/2)+0.1) +1.0;
+               /* if(sqrtn*sqrtn != count/2)
                 {
                         STARSH_ERROR("half of number of particles must be square of some integer");
                         return STARSH_WRONG_PARAMETER;
-                }
-
+                }*/
+		int index = 0;
                 double *x = point, *y = x+count;
-                for(i = 0; i < sqrtn; i++)
-                        for(j = 0; j < sqrtn; j++)
+                for(i = 0; i < sqrtn && index<count; i++)
+                        for(j = 0; j < sqrtn && index<count; j++)
                         {
                                 STARSH_int ind = i*sqrtn + j;
                                 x[ind] = x[(count/2)+ind]= (i/2+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
                                 y[ind] = y[(count/2)+ind]= (j/2+0.1+0.8*rand()/(1.0+RAND_MAX))/sqrtn;
+				index++;
                         }
+
 
                zsort(count/2, point);
                zsort(count/2, &point[count/2]);
