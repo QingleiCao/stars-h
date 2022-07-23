@@ -375,8 +375,8 @@ generate_pkgconfig_file()
 
 # Collect STARS-H sources + headers
 set(DOXYGEN_INPUT)
-add_subdirectory("src")
-add_subdirectory("include")
+add_subdirectory(src)
+add_subdirectory(include)
 
 
 ###############################################################################
