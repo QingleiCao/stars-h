@@ -847,15 +847,12 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
             return STARSH_WRONG_PARAMETER;
         }*/
 
-        double *x = point, *y = x+count*time_slots, *z = y+count*time_slots;
+	double *x = point, *y = x+count*time_slots, *z = y+count*time_slots;
 
 	int *grid = (int *) calloc((int)sqrtn, sizeof(int));
 	for(i = 0; i < sqrtn; i++)
-	{
 		grid[i] = i+1;
-		//printf("=============================================> grid[i]: %d\n", grid[i]);
-	}
-	printf("=============================== sqrtn;: %d\n", sqrtn);
+
 	for(i = 0; i < sqrtn && index<count; i++)
 		for(j = 0; j < sqrtn && index<count; j++)
 		{
@@ -865,7 +862,6 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
 
 			x[index] = (grid[i]-0.5+uniform_distribution_fun(-0.4, 0.4))/sqrtn;
 			y[index] = (grid[j]-0.5+uniform_distribution_fun(-0.4, 0.4))/sqrtn;
-	printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%------ %f, %f\n", x[ind], y[ind]);
 			z[ind] = 1.0;
 			index++;
 		}
@@ -901,11 +897,11 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
 			z[k+l*count] = (double) (t++/time_slots);
 		}
 	}
-		zsort3(count*time_slots, point); 
+	zsort3(count*time_slots, point); 
 
 	//for(i = 0; i < count*time_slots; i++)
 	//{
-		//printf("=== %d, %d, %d, %f, %f, %f\n", count, time_slots, i, x[i], y[i], z[i]);
+	//printf("=== %d, %d, %d, %f, %f, %f\n", count, time_slots, i, x[i], y[i], z[i]);
 	//}
 
 
