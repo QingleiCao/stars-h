@@ -903,10 +903,10 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
 	}
 		zsort3(count*time_slots, point); 
 
-	for(i = 0; i < count*time_slots; i++)
-	{
-		printf("=== %d, %d, %d, %f, %f, %f\n", count, time_slots, i, x[i], y[i], z[i]);
-	}
+	//for(i = 0; i < count*time_slots; i++)
+	//{
+		//printf("=== %d, %d, %d, %f, %f, %f\n", count, time_slots, i, x[i], y[i], z[i]);
+	//}
 
 
 	/*	 for(k = 0; k < time_slots; k++)
