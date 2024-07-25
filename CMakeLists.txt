@@ -346,6 +346,11 @@ if(STARPU AND KBLAS)
 #    endif()
 endif()
 
+find_package (Python COMPONENTS Interpreter)
+if( NOT Python_Interpreter_FOUND )
+    message(FATAL_ERROR "Stars-H needs python to generate the spatial data")
+endif( NOT Python_Interpreter_FOUND )
+
 ###############################################################################
 ##                          PRINT CONFIGURATION                              ##
 ###############################################################################
