@@ -15,6 +15,10 @@
 #include "starsh.h"
 #include "starsh-spatial.h"
 
+#ifdef CUDA
+#include <cuda_runtime.h>
+#endif
+
 #define PI 3.14159265358979323846264338327950288 
 
 

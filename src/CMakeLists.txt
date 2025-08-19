@@ -30,8 +30,14 @@ set(DOXYGEN_INPUT ${DOXYGEN_INPUT} ${STARSH_SRC} PARENT_SCOPE)
 # Define STARS-H library
 add_library(starsh STATIC ${STARSH_SRC} ${BACKENDS_OBJECTS})
 
+# Set position-independent code for static library (needed when linking into shared libraries)
+set_target_properties(starsh PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 # Install STARS-H library
 install(TARGETS starsh DESTINATION ${LIBDIR})
+
+# Add starsh target to export set for HICMA PARSEC
+install(TARGETS starsh EXPORT HICMAParsecTargets)
 
 # Add compile and link flags for STARS-H
 if(OPENMP)

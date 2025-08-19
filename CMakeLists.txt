@@ -35,16 +35,18 @@ endif()
 
 # Check if ECRC CMake modules are there
 # This modules are used to find all required and optional dependencies
-if(NOT EXISTS "${CMAKE_SOURCE_DIR}/cmake_modules/ecrc/modules")
+# When built as submodule, CMAKE_SOURCE_DIR points to parent project
+# Use CMAKE_CURRENT_SOURCE_DIR instead
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/ecrc/modules")
     message(FATAL_ERROR "ECRC CMake modules were not found.\nHave you done: "
         "'git submodule update --init'?")
 endif()
 
 # Append path to CMake modules and init ECRC CMake modules
 set(ECRC_CMAKE_MODULE_PATH
-    "${CMAKE_SOURCE_DIR}/cmake_modules/ecrc/modules")
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/ecrc/modules")
 list(APPEND CMAKE_MODULE_PATH "${ECRC_CMAKE_MODULE_PATH}")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 include(EcrcInit)
 include(GenPkgConfig)
 find_package(PkgConfig REQUIRED)
@@ -123,7 +125,7 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 find_package(PkgConfig REQUIRED)
 
 # Set path to header files of STARS-H
-include_directories("${CMAKE_SOURCE_DIR}/include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 
 ###############################################################################
@@ -194,6 +196,12 @@ if(CUDA)
     if(CMAKE_CUDA_COMPILER)
         enable_language(CUDA)
         add_definitions("-DCUDA")
+        # Use CMake's CUDAToolkit find mechanism instead of hardcoded paths
+        find_package(CUDAToolkit REQUIRED)
+        # Add CUDA include directories for C compiler as well
+        include_directories(${CUDAToolkit_INCLUDE_DIRS})
+        # Add CUDA library directories for linker
+        link_directories(${CUDAToolkit_LIBRARY_DIRS})
     # If it is not available
     else()
         set(CUDA OFF)
@@ -288,7 +296,9 @@ else()
 endif()
 
 # Find LAPACKE and set flags for compiler and linker
-find_package(LAPACKE COMPONENTS LAPACKEXT)
+# Use ECRC FindLAPACKE.cmake directly to avoid conflicts with DPLASMA
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/ecrc/modules/find/FindLAPACKE.cmake")
+# The include above already handles LAPACKE with LAPACKEXT component
 if(LAPACK_FOUND AND LAPACK_LIBRARY_DIRS)
     # the RPATH to be used when installing
     list(APPEND CMAKE_INSTALL_RPATH "${LAPACK_LIBRARY_DIRS}")

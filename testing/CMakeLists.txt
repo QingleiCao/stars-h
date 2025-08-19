@@ -61,13 +61,13 @@ if(MPI AND STARPU)
         )
 endif()
 
-if(CUDA)
+if(CUDA AND STARPU)
     list(APPEND tests_files
         "starpu_spatial_gpu.c"
         )
 endif()
 
-if(CUDA AND MPI)
+if(CUDA AND MPI AND STARPU)
     list(APPEND tests_files
         "mpi_starpu_spatial_gpu.c"
         )
@@ -81,6 +81,9 @@ foreach(test_src ${tests_files})
     add_executable(test_${test_exe} ${test_src})
     target_link_libraries(test_${test_exe} starsh ${CBLAS_LIBRARIES}
         ${LAPACKE_LIBRARIES} ${OpenMP_C_FLAGS})
+    if(CUDA)
+        target_link_libraries(test_${test_exe} CUDA::cudart CUDA::cublas CUDA::cusolver)
+    endif(CUDA)
     if((test_src MATCHES "starpu_*") OR (test_src MATCHES "mpi_starpu_*"))
         target_link_libraries(test_${test_exe} ${STARPU_LIBRARIES})
     endif()
