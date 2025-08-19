@@ -24,7 +24,7 @@
 ###############################################################################
 
 # Need to identify lowest possible CMake version
-cmake_minimum_required(VERSION 3.2.3)
+cmake_minimum_required(VERSION 3.5)
 
 # Restrict building in top-level directory
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")

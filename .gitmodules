@@ -1,3 +1,4 @@
 [submodule "cmake_modules/ecrc"]
 	path = cmake_modules/ecrc
-	url = https://github.com/ecrc/ecrc_cmake
+	url = https://github.com/QingleiCao/ecrc_cmake.git 
+    branch = master
