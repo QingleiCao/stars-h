@@ -68,14 +68,14 @@ set(CMAKE_BUILD_TYPE Release CACHE STRING
     RelWithDebInfo MinSizeRel")
 
 # Options for possible backends
-option(OPENMP "Use OpenMP" ON)
-option(MPI "Use MPI" ON)
-option(STARPU "Use StarPU" ON)
+option(OPENMP "Use OpenMP" OFF)
+option(MPI "Use MPI" OFF)
+option(STARPU "Use StarPU" OFF)
 # Since KBLAS does not support pkg-config, it is OFF by default, since user has
 # to provide path by means of
 # CFLAGS="-I/path/to/kblas/include -L/path/to/kblas/lib"
-option(KBLAS "Use KBLAS" ON)
-option(CUDA "Use CUDA" ON)
+option(KBLAS "Use KBLAS" OFF)
+option(CUDA "Use CUDA" OFF)
 #set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -gencode arch=compute_70,code=sm_70")
 
 # Option to force using parallel blas instead of sequential
@@ -85,10 +85,10 @@ option(USE_PARALLEL_BLAS "Prefer parallel blas libraries" OFF)
 option(GSL "Use special functions from Gnu Scientific Library" ON)
 
 # Options for examples
-option(EXAMPLES "Generate examples binaries" ON)
+option(EXAMPLES "Generate examples binaries" OFF)
 
 # Option for testing
-option(TESTING "Generate testing binaries" ON)
+option(TESTING "Generate testing binaries" OFF)
 
 # Option for documentation
 set(DOCS FULL CACHE STRING
