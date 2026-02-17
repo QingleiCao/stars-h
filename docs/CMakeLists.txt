@@ -11,5 +11,13 @@ string(REPLACE ";" "\"\\\n    \"" DOXYGEN_INPUT "${DOXYGEN_INPUT}")
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.in"
     "${CMAKE_CURRENT_BINARY_DIR}/config")
-add_custom_target(docs COMMAND
+
+add_custom_target(docs-starsh COMMAND
     "${DOXYGEN_EXECUTABLE}" "${CMAKE_CURRENT_BINARY_DIR}/config")
+
+# Reuse global docs target when building as a subproject.
+if(TARGET docs)
+    add_dependencies(docs docs-starsh)
+else()
+    add_custom_target(docs DEPENDS docs-starsh)
+endif()
