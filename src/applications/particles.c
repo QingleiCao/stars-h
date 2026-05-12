@@ -914,7 +914,7 @@ int starsh_particles_generate_obsolete5(STARSH_particles **data,
 		 }
 		 }
 	 */
-	free(pointcopy);
+	//free(pointcopy);
 
 
     }
